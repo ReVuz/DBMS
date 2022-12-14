@@ -1,0 +1,168 @@
+ use company;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| department        |
+| dlocation         |
+| employee          |
+| project           |
+| works_on          |
++-------------------+
+5 rows in set (0.25 sec)
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| sex      | varchar(20) | NO   |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  | MUL | NULL    |       |
+| DNo      | varchar(20) | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.06 sec)
+
+mysql> alter table employee add column age int(5);
+Query OK, 0 rows affected, 1 warning (0.26 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| sex      | varchar(20) | NO   |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  | MUL | NULL    |       |
+| DNo      | varchar(20) | YES  | MUL | NULL    |       |
+| age      | int         | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> drop table project;
+ERROR 3730 (HY000): Cannot drop table 'project' referenced by a foreign key constraint 'works_on_ibfk_2' on table 'works_on'.
+mysql> desc works_on;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| SSN   | varchar(20) | YES  | MUL | NULL    |       |
+| PNo   | varchar(20) | YES  | MUL | NULL    |       |
+| Hours | time        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table works_on drop constraint works_on_ibfk_2;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> drop table project;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> desc works_on;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| SSN   | varchar(20) | YES  | MUL | NULL    |       |
+| PNo   | varchar(20) | YES  | MUL | NULL    |       |
+| Hours | time        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into works_on values('e1001','12345','12:12');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`company`.`works_on`, CONSTRAINT `works_on_ibfk_1` FOREIGN KEY (`SSN`) REFERENCES `employee` (`SSN`))
+mysql> insert into employee values('e1001','Ashkar','Abcd','male','12345','e1001','d1001',30);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`company`.`employee`, CONSTRAINT `employee_ibfk_2` FOREIGN KEY (`DNo`) REFERENCES `department` (`DNo`))
+mysql> set FOREIGN_KEY_CHECKS = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee values('e1001','Ashkar','Abcd','male','12345','e1001','d1001',30);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into works_on values('e1001','12345','12:12');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into works_on values('e1002','123456','12:21'),('e1003','2468','10:10');
+Query OK, 2 rows affected (0.03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select 8 from works_on;
++---+
+| 8 |
++---+
+| 8 |
+| 8 |
+| 8 |
++---+
+3 rows in set (0.00 sec)
+
+mysql> select * from works_on;
++-------+--------+----------+
+| SSN   | PNo    | Hours    |
++-------+--------+----------+
+| e1001 | 12345  | 12:12:00 |
+| e1002 | 123456 | 12:21:00 |
+| e1003 | 2468   | 10:10:00 |
++-------+--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+------+--------+----------+-------+------+
+| SSN   | name   | Adress | sex  | Salary | SuperSSN | DNo   | age  |
++-------+--------+--------+------+--------+----------+-------+------+
+| e1001 | Ashkar | Abcd   | male | 12345  | e1001    | d1001 |   30 |
++-------+--------+--------+------+--------+----------+-------+------+
+1 row in set (0.00 sec)
+
+mysql> truncate table works_on;
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> select * from works_on;
+Empty set (0.00 sec)
+
+mysql> desc department;
++--------------+-------------+------+-----+------------+-------+
+| Field        | Type        | Null | Key | Default    | Extra |
++--------------+-------------+------+-----+------------+-------+
+| DNo          | varchar(20) | NO   | PRI | NULL       |       |
+| DName        | varchar(20) | YES  |     | NULL       |       |
+| MgrSSN       | varchar(20) | YES  | MUL | NULL       |       |
+| MgrStartDate | date        | YES  |     | 2012-12-12 |       |
++--------------+-------------+------+-----+------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from employee;
++-------+--------+--------+------+--------+----------+-------+------+
+| SSN   | name   | Adress | sex  | Salary | SuperSSN | DNo   | age  |
++-------+--------+--------+------+--------+----------+-------+------+
+| e1001 | Ashkar | Abcd   | male | 12345  | e1001    | d1001 |   30 |
++-------+--------+--------+------+--------+----------+-------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into employee values('e1002','Gautham','Hno:10/15','Male','24680','e1002','d1002',28),('e1003','Shriya','Pqrs','Female','30000','e1003','d1003','28'),('e1004','Ritika','Hno:13/25','Female','28000','e1004','d1004',33),('e1005','Himesh','Hno:36/59','Male','30000','e1005','d1005','35);
+    '> '
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> insert into employee values('e1002','Gautham','Hno:10/15','Male','24680','e1002','d1002',28),('e1003','Shriya','Pqrs','Female','30000','e1003','d1003','28'),('e1004','Ritika','Hno:13/25','Female','28000','e1004','d1004',33),('e1005','Himesh','Hno:36/59','Male','30000','e1005','d1005',35);
+Query OK, 4 rows affected (0.03 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++-------+---------+-----------+--------+--------+----------+-------+------+
+| SSN   | name    | Adress    | sex    | Salary | SuperSSN | DNo   | age  |
++-------+---------+-----------+--------+--------+----------+-------+------+
+| e1001 | Ashkar  | Abcd      | male   | 12345  | e1001    | d1001 |   30 |
+| e1002 | Gautham | Hno:10/15 | Male   | 24680  | e1002    | d1002 |   28 |
+| e1003 | Shriya  | Pqrs      | Female | 30000  | e1003    | d1003 |   28 |
+| e1004 | Ritika  | Hno:13/25 | Female | 28000  | e1004    | d1004 |   33 |
+| e1005 | Himesh  | Hno:36/59 | Male   | 30000  | e1005    | d1005 |   35 |
++-------+---------+-----------+--------+--------+----------+-------+------+
+5 rows in set (0.00 sec)
+
+mysql> truncate table employee;
+Query OK, 0 rows affected (0.20 sec)

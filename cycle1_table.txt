@@ -1,0 +1,362 @@
+ use company;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| department        |
+| dlocation         |
+| employee          |
+| project           |
+| works_on          |
++-------------------+
+5 rows in set (0.10 sec)
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | YES  |     | NULL    |       |
+| Name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| Sex      | varchar(20) | YES  |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  |     | NULL    |       |
+| DNo      | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> desc department;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| DNo          | varchar(20) | YES  |     | NULL    |       |
+| DName        | varchar(20) | YES  |     | NULL    |       |
+| MgrSSN       | varchar(20) | YES  |     | NULL    |       |
+| MgrStartDate | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc works_on;;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| SSN   | varchar(20) | YES  |     | NULL    |       |
+| PNo   | varchar(20) | YES  |     | NULL    |       |
+| Hours | time        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+ERROR:
+No query specified
+
+mysql> desc works_on;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| SSN   | varchar(20) | YES  |     | NULL    |       |
+| PNo   | varchar(20) | YES  |     | NULL    |       |
+| Hours | time        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| department        |
+| dlocation         |
+| employee          |
+| project           |
+| works_on          |
++-------------------+
+5 rows in set (0.00 sec)
+
+mysql> desc project;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| PNo       | varchar(20) | YES  |     | NULL    |       |
+| PName     | varchar(20) | YES  |     | NULL    |       |
+| PLocation | varchar(20) | YES  |     | NULL    |       |
+| DNo       | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table employee add primary key(SSN);
+Query OK, 0 rows affected (0.89 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| Name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| Sex      | varchar(20) | YES  |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  |     | NULL    |       |
+| DNo      | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table employee add foreign key(SuperSSN) references employee(SSN);
+Query OK, 0 rows affected (0.55 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| Name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| Sex      | varchar(20) | YES  |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  | MUL | NULL    |       |
+| DNo      | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table department add primary key(DNO);
+Query OK, 0 rows affected (0.27 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| department        |
+| dlocation         |
+| employee          |
+| project           |
+| works_on          |
++-------------------+
+5 rows in set (0.02 sec)
+
+mysql> alter table dlocation add primary key(DLOC);
+Query OK, 0 rows affected (0.21 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table project add primary key(PNO);
+Query OK, 0 rows affected (1.89 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table Works_on add foreign key(SSN) refernces employee(SSN),
+    -> add foreign key(PNO) refernces Project(PNO);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refernces employee(SSN),
+add foreign key(PNO) refernces Project(PNO)' at line 1
+mysql> alter table Works_on add foreign key(SSN) refernces employee(SSN),
+    -> add foreign key(PNO) references Project(PNO);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refernces employee(SSN),
+add foreign key(PNO) references Project(PNO)' at line 1
+mysql> desc project;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| PNo       | varchar(20) | NO   | PRI | NULL    |       |
+| PName     | varchar(20) | YES  |     | NULL    |       |
+| PLocation | varchar(20) | YES  |     | NULL    |       |
+| DNo       | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table Works_on add foreign key(SSN) refernces employee(SSN),
+    -> add foreign key(PNO) refernces Project(PNo);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refernces employee(SSN),
+add foreign key(PNO) refernces Project(PNo)' at line 1
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| Name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| Sex      | varchar(20) | YES  |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  | MUL | NULL    |       |
+| DNo      | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table works_on
+    -> add foreign key(SSN) refernces employee(SSN),
+    -> add foreign key(PNo) refernces project(PNo);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refernces employee(SSN),
+add foreign key(PNo) refernces project(PNo)' at line 2
+mysql> alter table works_on
+    -> alter table Works_on add foreign key(SSN) references employee(SSN),
+    -> add foreign key(PNo) references project(PNo);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table Works_on add foreign key(SSN) references employee(SSN),
+add foreign key(PN' at line 2
+mysql> alter table works_on
+    -> add foreign key(SSN) references employee(SSN),
+    -> add foreign key(PNo) references project(PNo);
+Query OK, 0 rows affected (0.22 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Works_on;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| SSN   | varchar(20) | YES  | MUL | NULL    |       |
+| PNo   | varchar(20) | YES  | MUL | NULL    |       |
+| Hours | time        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table works on add foreign key(DNO) refernces department(DNO);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'on add foreign key(DNO) refernces department(DNO)' at line 1
+mysql> alter table works on add foreign key(DNo) refernces department(DNo);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'on add foreign key(DNo) refernces department(DNo)' at line 1
+mysql> alter table works on add foreign key(DNo) references department(DNo);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'on add foreign key(DNo) references department(DNo)' at line 1
+mysql> alter table works on add foreign key(DNO) references department(DNO);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'on add foreign key(DNO) references department(DNO)' at line 1
+mysql>
+mysql> alter table works_on add foreign key(DNO) references department(DNO);
+ERROR 1072 (42000): Key column 'DNO' doesn't exist in table
+mysql> alter table works_on add foreign key(DNo) references department(DNo);
+ERROR 1072 (42000): Key column 'DNo' doesn't exist in table
+mysql> desc department;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| DNo          | varchar(20) | NO   | PRI | NULL    |       |
+| DName        | varchar(20) | YES  |     | NULL    |       |
+| MgrSSN       | varchar(20) | YES  |     | NULL    |       |
+| MgrStartDate | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| Name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| Sex      | varchar(20) | YES  |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  | MUL | NULL    |       |
+| DNo      | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table employee add foreign key(DNo) references department(DNo);
+Query OK, 0 rows affected (0.19 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table department add foreign key(MgrSSN) references employee(SSN);
+Query OK, 0 rows affected (0.25 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc dlocation;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| DNo   | varchar(20) | YES  |     | NULL    |       |
+| DLoc  | varchar(20) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table dlocation add foreign key(DNo) references department(DNo);
+Query OK, 0 rows affected (0.14 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table project add foreign key(DNo) references department(DNo);
+Query OK, 0 rows affected (0.17 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| Name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| Sex      | varchar(20) | YES  |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  | MUL | NULL    |       |
+| DNo      | varchar(20) | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+ desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SSN      | varchar(20) | NO   | PRI | NULL    |       |
+| Name     | varchar(20) | YES  |     | NULL    |       |
+| Adress   | varchar(20) | YES  |     | NULL    |       |
+| Sex      | varchar(20) | YES  |     | NULL    |       |
+| Salary   | varchar(20) | YES  |     | NULL    |       |
+| SuperSSN | varchar(20) | YES  | MUL | NULL    |       |
+| DNo      | varchar(20) | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table employee alter column sex varchar(20) not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar(20) not null' at line 1
+mysql> alter table employee modify column sex varchar(20) not null;
+Query OK, 0 rows affected (0.53 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc department;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| DNo          | varchar(20) | NO   | PRI | NULL    |       |
+| DName        | varchar(20) | YES  |     | NULL    |       |
+| MgrSSN       | varchar(20) | YES  | MUL | NULL    |       |
+| MgrStartDate | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc works_on;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| SSN   | varchar(20) | YES  | MUL | NULL    |       |
+| PNo   | varchar(20) | YES  | MUL | NULL    |       |
+| Hours | time        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc project;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| PNo       | varchar(20) | NO   | PRI | NULL    |       |
+| PName     | varchar(20) | YES  |     | NULL    |       |
+| PLocation | varchar(20) | YES  |     | NULL    |       |
+| DNo       | varchar(20) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc dlocation;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| DNo   | varchar(20) | YES  | MUL | NULL    |       |
+| DLoc  | varchar(20) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table employee modify column SSN varchar(20) unique;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table department alter MgrStartDate set default '12-12-12';
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table dlocation modify Dloc varchar(20) null;
+ERROR 1171 (42000): All parts of a PRIMARY KEY must be NOT NULL; if you need NULL in a key, use UNIQUE instead
+mysql> alter table works_on modify PNo varchar(20) null;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee modify name varchar(20) check( name not like'1%');
+Query OK, 0 rows affected (0.36 sec)
+Records: 0  Duplicates: 0  Warnings: 0
