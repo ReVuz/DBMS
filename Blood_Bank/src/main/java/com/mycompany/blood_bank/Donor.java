@@ -6,6 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -85,7 +90,7 @@ public class Donor extends javax.swing.JFrame {
 
         jRadioButton2.setText(" Female");
 
-        jButton1.setText("Next Page");
+        jButton1.setText("Submit");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -184,40 +189,44 @@ public class Donor extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-        try{
-            Connection con = com.mycompany.blood_bank.Connector.getConnection();
-            String sql = "insert into donor values(?,?,?,?,?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1,jTextField1.getText());
-            ps.setInt(2,Integer.parseInt(jTextField3.getText()));
-            ps.setString(3, jTextField2.getText());
-            ps.setInt(4, Integer.parseInt(jTextField4.getText()));
-            if(jRadioButton1.isSelected()){
-                ps.setString(5, jRadioButton1.getText());
-            }
-            else
-                ps.setString(5, jRadioButton2.getText());
-            ps.execute();
-            JOptionPane.showMessageDialog(this,"data saved succesfully");
-        }
-        catch(HeadlessException | NumberFormatException | SQLException e){
-            JOptionPane.showMessageDialog(this,"Error Data unsaved");
-        }
-        
-        
-        
-        
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        try{
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Donor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/BBM","root","root")) {
+                Statement stmt = con.createStatement();
+                String sql = "insert into donor values(?,?,?,?,?)";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1,jTextField1.getText());
+                ps.setInt(2,Integer.parseInt(jTextField2.getText()));
+                ps.setString(3, jTextField3.getText());
+                ps.setInt(4, Integer.parseInt(jTextField4.getText()));
+                if(jRadioButton1.isSelected()){
+                    ps.setString(5, jRadioButton1.getText());
+                }
+                else
+                    ps.setString(5, jRadioButton2.getText());
+                ps.execute();
+                stmt.close();
+                con.close();
+                JOptionPane.showMessageDialog(this,"data saved succesfully");
+            }}
+            catch(HeadlessException | NumberFormatException | SQLException e){
+                JOptionPane.showMessageDialog(this,"Error Data unsaved");
+            }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments

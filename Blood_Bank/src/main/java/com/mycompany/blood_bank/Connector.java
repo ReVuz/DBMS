@@ -16,7 +16,7 @@ public class Connector {
     public static void main(String[] args){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/BBM","user = root","password = root")) {
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/BBM","root","root")) {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("select * from Donor");
                 while(rs.next())
@@ -26,9 +26,5 @@ public class Connector {
         catch(Exception e){
             System.out.println(e);
         }
-    }
-
-    public static Connection getConnection() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
