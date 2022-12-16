@@ -1,0 +1,27 @@
+ try{
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Donor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/BBM","root","root")) {
+                Statement stmt = con.createStatement();
+                String sql = "insert into donor values(?,?,?,?,?)";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1,jTextField1.getText());
+                ps.setInt(2,Integer.parseInt(jTextField2.getText()));
+                ps.setString(3, jTextField3.getText());
+                ps.setInt(4, Integer.parseInt(jTextField4.getText()));
+                if(jRadioButton1.isSelected()){
+                    ps.setString(5, jRadioButton1.getText());
+                }
+                else
+                    ps.setString(5, jRadioButton2.getText());
+                ps.execute();
+                stmt.close();
+                con.close();
+                JOptionPane.showMessageDialog(this,"data saved succesfully");
+            }}
+            catch(HeadlessException | NumberFormatException | SQLException e){
+                JOptionPane.showMessageDialog(this,"Error Data unsaved");
+            }
