@@ -1,0 +1,60 @@
+mysql> select * from employee;
++-------+---------+-----------+--------+--------+----------+------+------+
+| SSN   | Name    | Address   | Sex    | Salary | SuperSSN | DNo  | Age  |
++-------+---------+-----------+--------+--------+----------+------+------+
+| e100  | Gouri   | Chennai   | Female |  32000 | e100     | D001 |   25 |
+| e1001 | Gautham | Hno:15/25 | Male   |  25000 | e1001    | d1   | NULL |
+| e1002 | Shriya  | Hno:25/39 | Female |  32000 | e1002    | d1   | NULL |
+| e1003 | Gopal   | Hno:23/25 | Male   |  33000 | e1003    | d2   | NULL |
+| e1004 | Ritika  | Hno:36/39 | Female |  38000 | e1004    | d2   | NULL |
+| e1005 | Ranveer | Hno:10/25 | Male   |  26000 | e1005    | d3   | NULL |
+| e1006 | Rohit   | Hno:2/15  | Male   |  33000 | e1006    | d5   | NULL |
++-------+---------+-----------+--------+--------+----------+------+------+
+7 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> savepoint save1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee values('e111','ABC','Mumbai','Male',25000,'e100','D001',28);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+-----------+--------+--------+----------+------+------+
+| SSN   | Name    | Address   | Sex    | Salary | SuperSSN | DNo  | Age  |
++-------+---------+-----------+--------+--------+----------+------+------+
+| e100  | Gouri   | Chennai   | Female |  32000 | e100     | D001 |   25 |
+| e1001 | Gautham | Hno:15/25 | Male   |  25000 | e1001    | d1   | NULL |
+| e1002 | Shriya  | Hno:25/39 | Female |  32000 | e1002    | d1   | NULL |
+| e1003 | Gopal   | Hno:23/25 | Male   |  33000 | e1003    | d2   | NULL |
+| e1004 | Ritika  | Hno:36/39 | Female |  38000 | e1004    | d2   | NULL |
+| e1005 | Ranveer | Hno:10/25 | Male   |  26000 | e1005    | d3   | NULL |
+| e1006 | Rohit   | Hno:2/15  | Male   |  33000 | e1006    | d5   | NULL |
+| e111  | ABC     | Mumbai    | Male   |  25000 | e100     | D001 |   28 |
++-------+---------+-----------+--------+--------+----------+------+------+
+8 rows in set (0.00 sec)
+
+mysql> savepoint save2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> rollback to save1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+-----------+--------+--------+----------+------+------+
+| SSN   | Name    | Address   | Sex    | Salary | SuperSSN | DNo  | Age  |
++-------+---------+-----------+--------+--------+----------+------+------+
+| e100  | Gouri   | Chennai   | Female |  32000 | e100     | D001 |   25 |
+| e1001 | Gautham | Hno:15/25 | Male   |  25000 | e1001    | d1   | NULL |
+| e1002 | Shriya  | Hno:25/39 | Female |  32000 | e1002    | d1   | NULL |
+| e1003 | Gopal   | Hno:23/25 | Male   |  33000 | e1003    | d2   | NULL |
+| e1004 | Ritika  | Hno:36/39 | Female |  38000 | e1004    | d2   | NULL |
+| e1005 | Ranveer | Hno:10/25 | Male   |  26000 | e1005    | d3   | NULL |
+| e1006 | Rohit   | Hno:2/15  | Male   |  33000 | e1006    | d5   | NULL |
++-------+---------+-----------+--------+--------+----------+------+------+
+7 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)

@@ -1,0 +1,135 @@
+mysql> create view VW_emp as select employee.Name from employee;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from VW_emp;
++---------+
+| Name    |
++---------+
+| Gautham |
+| Shriya  |
+| Gopal   |
+| Ritika  |
+| Ranveer |
+| Rohit   |
++---------+
+6 rows in set (0.01 sec)
+
+mysql> create view VW_SSN as select SuperSSN,DNo from employee where sex = 'F';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from VW_SSN;
+Empty set (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+-----------+--------+--------+----------+------+------+
+| SSN   | Name    | Address   | Sex    | Salary | SuperSSN | DNo  | Age  |
++-------+---------+-----------+--------+--------+----------+------+------+
+| e1001 | Gautham | Hno:15/25 | Male   |  25000 | e1001    | d1   | NULL |
+| e1002 | Shriya  | Hno:25/39 | Female |  32000 | e1002    | d1   | NULL |
+| e1003 | Gopal   | Hno:23/25 | Male   |  33000 | e1003    | d2   | NULL |
+| e1004 | Ritika  | Hno:36/39 | Female |  38000 | e1004    | d2   | NULL |
+| e1005 | Ranveer | Hno:10/25 | Male   |  26000 | e1005    | d3   | NULL |
+| e1006 | Rohit   | Hno:2/15  | Male   |  33000 | e1006    | d5   | NULL |
++-------+---------+-----------+--------+--------+----------+------+------+
+6 rows in set (0.00 sec)
+
+mysql> create view VW_SSN as select SuperSSN,DNo from employee where sex = 'Female';
+ERROR 1050 (42S01): Table 'VW_SSN' already exists
+mysql> drop view VW_SSN;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create view VW_SSN as select SuperSSN,DNo from employee where sex = 'Female';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from VW_SSN;
++----------+------+
+| SuperSSN | DNo  |
++----------+------+
+| e1002    | d1   |
+| e1004    | d2   |
++----------+------+
+2 rows in set (0.00 sec)
+
+mysql> insert into employee values('e100','Gouri','Hno:22/36','Female',32000,'d3',25);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into employee values('e100','Gouri','Hno:22/36','Female',32000,'e100','d3',25);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| department        |
+| dlocation         |
+| employee          |
+| project           |
+| vw_emp            |
+| vw_ssn            |
+| works_on          |
++-------------------+
+7 rows in set (0.02 sec)
+
+mysql> select * from VW_SSN;
++----------+------+
+| SuperSSN | DNo  |
++----------+------+
+| e100     | d3   |
+| e1002    | d1   |
+| e1004    | d2   |
++----------+------+
+3 rows in set (0.00 sec)
+
+mysql> update VW_SSN set address = 'Chennai' where id = 'e100';
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update VW_SSN set address = 'Chennai' where SuperSSN = 'e100';
+ERROR 1054 (42S22): Unknown column 'address' in 'field list'
+mysql> update VW_SSN set address.employee = 'Chennai' where SuperSSN = 'e100';
+ERROR 1054 (42S22): Unknown column 'address.employee' in 'field list'
+mysql> update VW_SSN set address.employee = 'Chennai' where SuperSSN = 'e100' from employee;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employee' at line 1
+mysql> desc VW_SSN;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| SuperSSN | varchar(15) | YES  |     | NULL    |       |
+| DNo      | varchar(15) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+ create view VW_emp as select * from employee;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from VW_Emp;
++-------+---------+-----------+--------+--------+----------+------+------+
+| SSN   | Name    | Address   | Sex    | Salary | SuperSSN | DNo  | Age  |
++-------+---------+-----------+--------+--------+----------+------+------+
+| e100  | Gouri   | Hno:22/36 | Female |  32000 | e100     | d3   |   25 |
+| e1001 | Gautham | Hno:15/25 | Male   |  25000 | e1001    | d1   | NULL |
+| e1002 | Shriya  | Hno:25/39 | Female |  32000 | e1002    | d1   | NULL |
+| e1003 | Gopal   | Hno:23/25 | Male   |  33000 | e1003    | d2   | NULL |
+| e1004 | Ritika  | Hno:36/39 | Female |  38000 | e1004    | d2   | NULL |
+| e1005 | Ranveer | Hno:10/25 | Male   |  26000 | e1005    | d3   | NULL |
+| e1006 | Rohit   | Hno:2/15  | Male   |  33000 | e1006    | d5   | NULL |
++-------+---------+-----------+--------+--------+----------+------+------+
+7 rows in set (0.00 sec)
+
+mysql> update VW_emp set address = 'Chennai' where SSN = 'e100';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from VW_Emp;
++-------+---------+-----------+--------+--------+----------+------+------+
+| SSN   | Name    | Address   | Sex    | Salary | SuperSSN | DNo  | Age  |
++-------+---------+-----------+--------+--------+----------+------+------+
+| e100  | Gouri   | Chennai   | Female |  32000 | e100     | d3   |   25 |
+| e1001 | Gautham | Hno:15/25 | Male   |  25000 | e1001    | d1   | NULL |
+| e1002 | Shriya  | Hno:25/39 | Female |  32000 | e1002    | d1   | NULL |
+| e1003 | Gopal   | Hno:23/25 | Male   |  33000 | e1003    | d2   | NULL |
+| e1004 | Ritika  | Hno:36/39 | Female |  38000 | e1004    | d2   | NULL |
+| e1005 | Ranveer | Hno:10/25 | Male   |  26000 | e1005    | d3   | NULL |
+| e1006 | Rohit   | Hno:2/15  | Male   |  33000 | e1006    | d5   | NULL |
++-------+---------+-----------+--------+--------+----------+------+------+
+7 rows in set (0.00 sec)
+
+ drop view VW_emp;
+Query OK, 0 rows affected (0.01 sec)

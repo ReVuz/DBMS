@@ -1,0 +1,187 @@
+use emp
+switched to db emp
+emp> db
+emp
+emp> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   72.00 KiB
+emp> db.createCollection("Student")
+{ ok: 1 }
+emp> db.showCollections()
+TypeError: db.showCollections is not a function
+emp> db.getCollectionNames()
+[ 'Student' ]
+emp> db.Student.drop()
+true
+emp> db.getCollectionNames()
+[]
+emp> db.createCollection("Employee")
+{ ok: 1 }
+emp> db.employee.InsertOne({"empid":"e1001","Empname":"Ratheesh","Sal":268000})
+TypeError: db.employee.InsertOne is not a function
+emp> db.employee.insertOne({"empid":"e1001","Empname":"Ratheesh","Sal":268000})
+{
+  acknowledged: true,
+  insertedId: ObjectId("639d9f1c9c98c9cc4a2dcf7e")
+}
+emp> try{
+... db.employee.insertMany({"empid":"e1002","Empname":"Gopal","Sal":30000},
+... {"empid":"e1003","Empname":"Rakul","Sal":31000})
+... ;
+... }catch(e){
+... print(e);
+... }
+MongoInvalidArgumentError: Argument "docs" must be an array of documents
+    at new InsertManyOperation (C:\Users\HP\Desktop\mongosh.exe:54767:13)
+    at Collection.insertMany (C:\Users\HP\Desktop\mongosh.exe:61961:74)
+    at CliServiceProvider.insertMany (C:\Users\HP\Desktop\mongosh.exe:155196:64)
+    at Proxy.insertMany (C:\Users\HP\Desktop\mongosh.exe:401881:55)
+    at async Proxy.insertMany (C:\Users\HP\Desktop\mongosh.exe:396800:14)
+    at async Proxy.<anonymous> (C:\Users\HP\Desktop\mongosh.exe:396507:22)
+    at async Proxy.<anonymous> (C:\Users\HP\Desktop\mongosh.exe:396532:16)
+    at async REPL19:43:27
+    at async ShellEvaluator.innerEval (C:\Users\HP\Desktop\mongosh.exe:501610:14)
+    at async ShellEvaluator.customEval (C:\Users\HP\Desktop\mongosh.exe:501617:30) {
+  [Symbol(errorLabels)]: Set(0) {}
+}
+
+emp> try {
+... db.employee.insertMany([{ "empid": "e1002", "Empname": "Gopal", "Sal": 30000 }, { "empid": "e1003", "Empname": "Rakul", "Sal": 31000 });
+Uncaught:
+SyntaxError: Unexpected token, expected "," (2:134)
+
+  1 | try {
+> 2 | db.employee.insertMany([{ "empid": "e1002", "Empname": "Gopal", "Sal": 30000 }, { "empid": "e1003", "Empname": "Rakul", "Sal": 31000 });
+    |
+                    ^
+  3 |
+
+emp> try {
+... db.employee.insertMany([{ "empid": "e1002", "Empname": "Gopal", "Sal": 30000 }, { "empid": "e1003", "Empname": "Rakul", "Sal": 31000 }
+... ]);
+... }catch(e){
+... print(e);
+... }
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("639da0659c98c9cc4a2dcf7f"),
+    '1': ObjectId("639da0659c98c9cc4a2dcf80")
+  }
+}
+emp> db.employee.find()
+[
+  {
+    _id: ObjectId("639d9f1c9c98c9cc4a2dcf7e"),
+    empid: 'e1001',
+    Empname: 'Ratheesh',
+    Sal: 268000
+  },
+  {
+    _id: ObjectId("639da0659c98c9cc4a2dcf7f"),
+    empid: 'e1002',
+    Empname: 'Gopal',
+    Sal: 30000
+  },
+  {
+    _id: ObjectId("639da0659c98c9cc4a2dcf80"),
+    empid: 'e1003',
+    Empname: 'Rakul',
+    Sal: 31000
+  }
+]
+emp> db.employee.updateOne({"empid":"e1001"},{$set : {"empid":"e1006"})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:65)
+
+> 1 | db.employee.updateOne({"empid":"e1001"},{$set : {"empid":"e1006"})
+    |                                                                  ^
+  2 |
+
+emp> db.employee.updateOne({"empid":"e1001"},
+... {
+... $set : {"empid":"e1006"},
+... $currentDate : {lastModified : true}
+... }
+... )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+emp> db.employee.find()
+[
+  {
+    _id: ObjectId("639d9f1c9c98c9cc4a2dcf7e"),
+    empid: 'e1006',
+    Empname: 'Ratheesh',
+    Sal: 268000,
+    lastModified: ISODate("2022-12-17T11:03:39.992Z")
+  },
+  {
+    _id: ObjectId("639da0659c98c9cc4a2dcf7f"),
+    empid: 'e1002',
+    Empname: 'Gopal',
+    Sal: 30000
+  },
+  {
+    _id: ObjectId("639da0659c98c9cc4a2dcf80"),
+    empid: 'e1003',
+    Empname: 'Rakul',
+    Sal: 31000
+  }
+]
+emp> db.employee.save(
+... {
+... "_id" :  ObjectId("639da0659c98c9cc4a2dcf7f"),
+... "empid" : "e2100",
+... "Sal" : 25000
+... }
+... )
+TypeError: db.employee.save is not a function
+emp> show dbs
+admin    40.00 KiB
+config  108.00 KiB
+emp      80.00 KiB
+local    72.00 KiB
+emp> db.employee.save( {"empid": "e1002", "Empname" : "Gopal" "Sal": 30000 })
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:57)
+
+> 1 | db.employee.save( {"empid": "e1002", "Empname" : "Gopal" "Sal": 30000 })
+    |                                                          ^
+  2 |
+
+emp> db.employee.save( {"empid": "e1002", "Empname" : "Gopal","Sal": 30000 })
+TypeError: db.employee.save is not a function
+emp> db.getCollectionNames()
+[ 'employee', 'Employee' ]
+emp> db.employee.find()
+[
+  {
+    _id: ObjectId("639d9f1c9c98c9cc4a2dcf7e"),
+    empid: 'e1006',
+    Empname: 'Ratheesh',
+    Sal: 268000,
+    lastModified: ISODate("2022-12-17T11:03:39.992Z")
+  },
+  {
+    _id: ObjectId("639da0659c98c9cc4a2dcf7f"),
+    empid: 'e1002',
+    Empname: 'Gopal',
+    Sal: 30000
+  },
+  {
+    _id: ObjectId("639da0659c98c9cc4a2dcf80"),
+    empid: 'e1003',
+    Empname: 'Rakul',
+    Sal: 31000
+  }
+]
+emp> db.Employee.find()
+
+emp> db.Employee.drop()
+true
