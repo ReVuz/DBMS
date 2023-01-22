@@ -1,0 +1,55 @@
+create table department(Dno int,Dname varchar(20),MgrSSN varchar(20));
+
+Table created.
+
+SQL> insert into department values(01,'DCS','e1001');
+
+1 row created.
+
+SQL> insert into department values(02,'DDUk','e1002');
+
+1 row created.
+
+SQL> insert into department values(03,'DCA','e1003');
+
+1 row created.
+
+SQL> insert into department values(04,'SOE','e1004');
+
+1 row created.
+
+SQL> insert into department values(05,'SMS','e1005');
+
+1 row created.
+
+SQL> select * from department;
+
+       DNO DNAME                MGRSSN
+---------- -------------------- --------------------
+         1 DCS                  e1001
+         2 DDUk                 e1002
+         3 DCA                  e1003
+         4 SOE                  e1004
+         5 SMS                  e1005
+
+ 
+declare cursor c2 is select dno,dname from department;
+  2  data1 department.Dno%type;
+  3  data2 department.Dname%type;
+  4  begin
+  5  open c2;
+  6  loop
+  7  fetch c2 into data1,data2;
+  8  exit when c2%notfound;
+  9  dbms_output.put_line('Dno : '||data1||':: Dname : '||data2);
+ 10  end loop;
+ 11  close c2;
+ 12 end;
+SQL> /
+Dno : 1:: Dname : DCS
+Dno : 2:: Dname : DDUk
+Dno : 3:: Dname : DCA
+Dno : 4:: Dname : SOE
+Dno : 5:: Dname : SMS
+
+PL/SQL procedure successfully completed.

@@ -1,0 +1,3 @@
+select * from Donor,receiver where Donor.Blood_grp = Receiver.Blood_grp;
+
+ select Dname,Phone,Receiver.Blood_grp,Rname,Rphone from Donor,Receiver where Donor.Blood_grp = Receiver.Blood_grp;

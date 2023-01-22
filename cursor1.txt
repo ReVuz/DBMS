@@ -1,0 +1,109 @@
+SQL> create table employee(id varchar(20),name varchar(20),address varchar(20),salary int,age int);
+
+Table created.
+
+
+SQL> insert into employee values('D001','Ramcharan','Hyderabad',28000,32);
+
+1 row created.
+
+SQL> insert into employee values('D002','Diya','Hyderabad',29000,28);
+
+1 row created.
+
+SQL> insert into employee values('D003','Shekhar','Delhi',30000,29);
+
+1 row created.
+
+SQL> insert into employee values('D004','Shriya','Mumbai',31000,30);
+
+1 row created.
+
+SQL> insert into employee values('D005','Deepak','Bangalore',25000,26);
+
+1 row created.
+
+SQL> insert into employee values('D006','Zehra','Kochi',25000,26);
+
+1 row created.
+
+SQL> select * from employee;
+
+ID                   NAME                 ADDRESS                  SALARY
+-------------------- -------------------- -------------------- ----------
+       AGE
+----------
+D001                 Ramcharan            Hyderabad                 28000
+        32
+
+D002                 Diya                 Hyderabad                 29000
+        28
+
+D003                 Shekhar              Delhi                     30000
+        29
+
+
+ID                   NAME                 ADDRESS                  SALARY
+-------------------- -------------------- -------------------- ----------
+       AGE
+----------
+D004                 Shriya               Mumbai                    31000
+        30
+
+D005                 Deepak               Bangalore                 25000
+        26
+
+D006                 Zehra                Kochi                     25000
+        26
+
+
+6 rows selected.
+
+SQL> declare cursor c1 is select id,salary from employee where id = 01
+  2  for update;
+  3  sal number;
+  4  begin
+  5  for i in c1 loop
+  6  if i.Salary>20000 then
+  7  sal := .10;
+  8  else
+  9  sal := .15;
+ 10  end if;
+ 11  update employee set salary  = salary+salary*sal where current of c1;
+ 12  end loop;
+ 13  end;
+ 14  /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from employee;
+
+ID                   NAME                 ADDRESS                  SALARY
+-------------------- -------------------- -------------------- ----------
+       AGE
+----------
+D001                 Ramcharan            Hyderabad                 30800
+        32
+
+D002                 Diya                 Hyderabad                 29000
+        28
+
+D003                 Shekhar              Delhi                     30000
+        29
+
+
+ID                   NAME                 ADDRESS                  SALARY
+-------------------- -------------------- -------------------- ----------
+       AGE
+----------
+D004                 Shriya               Mumbai                    31000
+        30
+
+D005                 Deepak               Bangalore                 25000
+        26
+
+D006                 Zehra                Kochi                     25000
+        26
+
+
+6 rows selected.

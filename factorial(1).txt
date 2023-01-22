@@ -1,0 +1,11 @@
+SQL> CREATE OR REPLACE FUNCTION factorial (p_number IN NUMBER)
+  2  RETURN NUMBER
+  3  IS
+  4    v_factorial NUMBER := 1;
+  5  BEGIN
+  6    FOR i IN 1..p_number LOOP
+  7      v_factorial := v_factorial * i;
+  8    END LOOP;
+  9    RETURN v_factorial;
+ 10  END;
+ 11  /

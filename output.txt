@@ -1,0 +1,39 @@
+Output :
+
+Enter the distance from vertex 0 to each vertex :  0 3 -1 -1 -1
+Enter the distance from vertex 1 to each vertex :  3 0 10 2 6
+Enter the distance from vertex 2 to each vertex :  -1 10 0 4 -1
+Enter the distance from vertex 3 to each vertex :  -1 2 4 0 1
+Enter the distance from vertex 4 to each vertex :  -1 6 -1 1 0
+
+
+Choose any vertex as source :  2
+
+The MST for the given tree is :
+Edge 0 : (0 , 1 ) : cost = 3
+Edge 1 : (1 , 3 ) : cost = 2
+Edge 2 : (3 , 4 ) : cost = 1
+Edge 3 : (2 , 3 ) : cost = 4
+Cost of MST = 10
+
+ // int graph[][vr] = {{0, 5, 10, 15}, // values of a graph in a form of matrix
+    //                 {5, 0, 20, 30},
+    //         {10, 20, 0, 35},
+    //      {15, 30, 35, 0}};
+
+
+    //cout<<"Enter no: of vertices : "<<" ";
+    //cin>>no_of_vertices;
+    /*cout<<"Enter the adjacency matrix : "<<endl;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            cin>>a[i][j];
+            d[i][j] = a[i][j];
+        }
+    }*/
+
+//Floyd Warshall
+//without user input
+//hard coded
